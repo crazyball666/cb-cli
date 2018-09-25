@@ -1,4 +1,16 @@
 #!/usr/bin/env node
-const fs = require('fs');
-fs.writeFileSync('1.txt', '哈哈哈');
-console.log('写完了');
+const dev = require('../src/dev');
+const argv = process.argv[2];
+console.log(argv);
+
+if (argv === '-v') {
+
+} else if (argv === '-dev') {
+  dev.init();
+} else if (argv === '-build') {
+
+} else if (argv === undefined) {
+  console.log('缺少参数!')
+} else {
+  console.log('参数不存在!');
+}
