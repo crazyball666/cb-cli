@@ -4,7 +4,7 @@
   "description": "cli tools",
   "main": "index.js",
   "bin": {
-    "cb-cli": "./bin/cb-cli"
+    "cb-cli": "./bin/cb-cli.js"
   },
   "directories": {
     "bin": "./bin"
@@ -23,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/17620091437/cb-cli/issues"
   },
-  "homepage": "https://github.com/17620091437/cb-cli#readme"
+  "homepage": "https://github.com/17620091437/cb-cli#readme",
+  "dependencies": {}
 }
