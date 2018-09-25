@@ -1,30 +1,28 @@
 {
-  "name": "npm-develop",
-  "version": "0.0.45",
+  "name": "cb-cli",
+  "version": "1.0.0",
+  "description": "cli tools",
   "main": "index.js",
   "bin": {
     "cb-cli": "./bin/cb-cli.js"
   },
-  "directories": {},
+  "directories": {
+    "bin": "./bin"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init": "node ./script/init.js",
+    "dev": "node ./bin/cb-cli.js"
   },
-  "author": "jinweigang",
-  "license": "ISC",
-  "devDependencies": {},
-  "dependencies": {
-    "commander": "^2.9.0",
-    "express": "^4.14.0",
-    "fs": "^0.0.2",
-    "ncp": "^2.0.0"
-  },
-  "description": "npm develop demo",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/17620091437/cb-cli.git"
   },
+  "author": "crazyball",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/17620091437/cb-cli/issues"
   },
-  "homepage": "https://github.com/17620091437/cb-cli#readme"
+  "homepage": "https://github.com/17620091437/cb-cli#readme",
+  "dependencies": {}
 }
