@@ -1,0 +1,20 @@
+{
+  "name": "cb-cli",
+  "version": "1.0.0",
+  "description": "cli tools",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init": "node ./script/init.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/17620091437/cb-cli.git"
+  },
+  "author": "crazyball",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/17620091437/cb-cli/issues"
+  },
+  "homepage": "https://github.com/17620091437/cb-cli#readme"
+}
