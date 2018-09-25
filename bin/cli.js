@@ -2,7 +2,7 @@ const init = require('../src/init.js');
 const start = require('../src/start.js');
 const program = require('commander');
 const pkg = require('../package.json');
-process.title = 'king';
+
 program
   .version(pkg.version);
 

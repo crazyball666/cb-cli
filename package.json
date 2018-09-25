@@ -4,7 +4,7 @@
   "description": "cli tools",
   "main": "index.js",
   "bin": {
-    "cli": "./bin/cli.js"
+    "king": "./bin/king.js"
   },
   "directories": {
     "bin": "./bin"
