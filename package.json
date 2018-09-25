@@ -24,5 +24,7 @@
     "url": "https://github.com/17620091437/cb-cli/issues"
   },
   "homepage": "https://github.com/17620091437/cb-cli#readme",
-  "dependencies": {}
+  "dependencies": {
+    "commander": "^2.9.0"
+  }
 }
