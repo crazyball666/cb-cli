@@ -12,7 +12,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "node ./script/init.js",
-    "dev": "node ./bin/cb-cli.js -dev"
+    "dev": "node ./bin/cb-cli.js -dev",
+    "devv": "webpack-dev-server --config config/dev.config.js"
   },
   "repository": {
     "type": "git",
