@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
 process.title = 'king';
-
-require('./cli.js');
+console.log(123);
+// require('./cli.js');
