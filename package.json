@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "cli tools",
   "main": "index.js",
-  "bin": "bin/cb-cli",
+  "bin": {
+    "cb-cli": "./bin/cb-cli"
+  },
   "directories": {
     "bin": "./bin"
   },
