@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "cli tools",
   "main": "index.js",
+  "bin": {
+    "init": "./bin/init.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "node ./script/init.js"
