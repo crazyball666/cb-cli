@@ -1,15 +1,23 @@
 const webpack = require('webpack');
-const devConfig = require('../config/dev.config')
+var WebpackDevServer = require("webpack-dev-server");
+const devConfig = require('../config/dev.config');
 module.exports = {
   init: () => {
-    webpack(devConfig, function (err, stats) {
-      process.stdout.write(stats.toString({
-        colors: true,
-        modules: false,
-        children: false,
-        chunks: false,
-        chunkModules: false
-      }))
+    let compiler = webpack(devConfig);
+    let server = WebpackDevServer(compiler, {
+      contentBase: path.resolve(dir, "dist"),
+      publicPath: '/',
+      host: "127.0.0.1",
+      port: "8080",
+      inline: false,
+      overlay: true,
+      hot: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
+    server.listen(8080, 'localhost', () => {
+      console.log('listening 8080...')
     })
   }
 }
