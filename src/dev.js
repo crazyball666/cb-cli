@@ -1,6 +1,10 @@
 const webpack = require('webpack');
+const path = require('path');
 var WebpackDevServer = require("webpack-dev-server");
 const devConfig = require('../config/dev.config');
+// 当前运行目录
+const dir = process.cwd();
+
 module.exports = {
   init: () => {
     let compiler = webpack(devConfig);
