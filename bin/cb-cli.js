@@ -1,3 +1,2 @@
-let fs = require('fs');
-fs.writeFileSync('./1.txt', '哈哈哈');
-console.log('写完啦');
+const init = require('../script/init');
+init.run('asd');
