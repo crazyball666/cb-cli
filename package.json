@@ -4,7 +4,7 @@
   "description": "cli tools",
   "main": "index.js",
   "bin": {
-    "cb-cli": "./bin/cb-cli.js"
+    "king": "./bin/king.js"
   },
   "directories": {
     "bin": "./bin"
@@ -25,6 +25,9 @@
   },
   "homepage": "https://github.com/17620091437/cb-cli#readme",
   "dependencies": {
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "express": "^4.14.0",
+    "fs": "^0.0.2",
+    "ncp": "^2.0.0"
   }
 }
