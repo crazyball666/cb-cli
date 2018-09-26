@@ -9,10 +9,7 @@ module.exports = {
       '../node_modules/',
       'webpack-dev-server/bin/webpack-dev-server.js'
     );
-    shelljs.exec(`node ${webpackDevServerPath} --progress --config config/dev.config.js`, (err, stdout, stderr) => {
-      if (err) console.log(err);
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
-    });
+    let webpackConfigPath = path.resolve(__dirname, '../config/dev.config.js');
+    shelljs.exec(`node ${webpackDevServerPath} --progress --config ${webpackConfigPath}`);
   },
 };
