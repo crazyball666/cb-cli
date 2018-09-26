@@ -13,8 +13,8 @@ const extractSass = new ExtractTextPlugin({
 module.exports = {
   //设置入口
   entry: {
-    app: path.resolve(__dirname, '../../blog/font-source/admin/src/js/app.js'),
-    vendor: path.resolve(__dirname, '../../blog/font-source/admin/src/js/vendor.js'),
+    app: path.resolve(dir, './src/js/app.js'),
+    vendor: path.resolve(dir, './src/js/vendor.js'),
   },
   //设置打包出口
   output: {
