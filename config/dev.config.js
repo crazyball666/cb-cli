@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 // 加载自动化css独立加载插件
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 // 清除dist插件
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 // 加载JS模块压缩编译插件
@@ -10,10 +10,9 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const dir = process.cwd();
 
 const extractSass = new ExtractTextPlugin({
-  filename: "[name].css",
+  filename: '[name].css',
   // disable: process.env.NODE_ENV === "development"
 });
-
 
 //配置正式开始
 module.exports = {
@@ -24,22 +23,21 @@ module.exports = {
   },
   //设置打包出口
   output: {
-    path: path.resolve(dir, 'dist'),//打包文件放在这个目录下
+    path: path.resolve(dir, 'dist'), //打包文件放在这个目录下
     filename: '[name].bundle.js', //打包文件名
-    publicPath: '/'
+    publicPath: '/',
   },
   devServer: {
-    contentBase: path.resolve(dir, "dist"),
+    contentBase: path.resolve(dir, 'dist'),
     publicPath: '/',
-    host: "127.0.0.1",
-    port: "8080",
+    host: '127.0.0.1',
+    port: '8080',
     inline: false,
     overlay: true,
     hot: true,
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
-
   },
   // source-map
   devtool: 'inline-source-map',
@@ -52,37 +50,36 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ["react", "es2015", "stage-2"],
+            presets: ['react', 'es2015', 'stage-2'],
             plugins: [require.resolve('babel-plugin-transform-runtime')],
-          }
-        }
+          },
+        },
       },
       {
         test: /\.(scss|css)$/,
         use: extractSass.extract({
-          fallback: "style-loader",
+          fallback: 'style-loader',
           use: [
-            "css-loader",
+            'css-loader',
             // {
             //   loader: 'postcss-loader',
             //   options: {
             //     parser: 'sugarss',
             //   }
             // },
-            "sass-loader"],
-        })
+            'sass-loader',
+          ],
+        }),
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: [
-          'file-loader'
-        ]
-      }
-    ]
+        use: ['file-loader'],
+      },
+    ],
   },
   //插件相关配置
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    // new CleanWebpackPlugin(['dist']),
     extractSass,
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
@@ -94,21 +91,21 @@ module.exports = {
       cacheGroups: {
         vendor: {
           //node_modules内的依赖库
-          chunks: "all",
+          chunks: 'all',
           test: /[\\/]node_modules[\\/]/,
-          name: "vendor",
+          name: 'vendor',
           minChunks: 1, //被不同entry引用次数(import),1次的话没必要提取
           maxInitialRequests: 5,
           minSize: 0,
           priority: 100,
           // enforce: true?
         },
-      }
+      },
     },
     // runtimeChunk: {
     //   name: 'runtime'
     // }
   },
   //设置模式为开发者模式
-  mode: 'development'
+  mode: 'development',
 };
