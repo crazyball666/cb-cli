@@ -53,16 +53,18 @@ module.exports = {
       {
         test: /\.(scss|css)$/,
         use: extractSass.extract({
-          fallback: 'style-loader',
+          fallback: require.resolve('style-loader'),
           use: [
-            'css-loader',
-            'sass-loader',
+            require.resolve('css-loader'),
+            require.resolve('sass-loader'),
           ],
         }),
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: ['file-loader'],
+        use: [
+          require.resolve('file-loader'),
+        ],
       },
     ],
   },
