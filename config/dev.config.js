@@ -2,24 +2,19 @@ const path = require('path');
 const webpack = require('webpack');
 // 加载自动化css独立加载插件
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// 清除dist插件
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-// 加载JS模块压缩编译插件
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // 当前运行目录
 const dir = process.cwd();
 
 const extractSass = new ExtractTextPlugin({
   filename: '[name].css',
-  // disable: process.env.NODE_ENV === "development"
 });
 
 //配置正式开始
 module.exports = {
   //设置入口
   entry: {
-    app: path.resolve(dir, 'src/js/app.js'),
-    vendor: path.resolve(dir, 'src/js/vendor.js'),
+    app: path.resolve(__dirname, '../../blog/font-source/admin/src/js/app.js'),
+    vendor: path.resolve(__dirname, '../../blog/font-source/admin/src/js/vendor.js'),
   },
   //设置打包出口
   output: {
@@ -50,7 +45,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['react', 'es2015', 'stage-2'],
+            presets: [require.resolve('babel-preset-react'), require.resolve('babel-preset-env'), require.resolve('babel-preset-stage-2')],
             plugins: [require.resolve('babel-plugin-transform-runtime')],
           },
         },
@@ -61,12 +56,6 @@ module.exports = {
           fallback: 'style-loader',
           use: [
             'css-loader',
-            // {
-            //   loader: 'postcss-loader',
-            //   options: {
-            //     parser: 'sugarss',
-            //   }
-            // },
             'sass-loader',
           ],
         }),
@@ -79,11 +68,9 @@ module.exports = {
   },
   //插件相关配置
   plugins: [
-    // new CleanWebpackPlugin(['dist']),
     extractSass,
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    // new UglifyJsPlugin(),
   ],
   // 提取第三方库和公共模块
   optimization: {
@@ -102,9 +89,6 @@ module.exports = {
         },
       },
     },
-    // runtimeChunk: {
-    //   name: 'runtime'
-    // }
   },
   //设置模式为开发者模式
   mode: 'development',
