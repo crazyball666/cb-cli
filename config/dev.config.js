@@ -47,7 +47,7 @@ module.exports = {
           options: {
             babelrc: false,
             presets: [require.resolve('babel-preset-react'), require.resolve('babel-preset-env'), require.resolve('babel-preset-stage-2')],
-            plugins: ['babel-runtime'],
+            plugins: [require.resolve('babel-runtime')],
           },
         },
       },
