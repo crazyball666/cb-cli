@@ -12,7 +12,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "node ./script/init.js",
-    "dev": "node ./bin/cb-cli.js --port"
+    "dev": "node ./bin/cb-cli.js -dev"
   },
   "repository": {
     "type": "git",
