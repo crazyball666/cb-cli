@@ -8,12 +8,12 @@ if (portIndex !== -1) {
   process.argv[portIndex + 1] && (port = process.argv[portIndex + 1]);
 }
 console.log(argv);
-console.log(port);
+console.log(`使用端口${port}...`);
 
 if (argv === '-v') {
 
 } else if (argv === '-dev') {
-  dev.init();
+  dev.init(port);
 } else if (argv === '-build') {
 
 } else if (argv === undefined) {
