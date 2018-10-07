@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 const dev = require('../src/dev');
+const build = require('../src/build');
 const argv = process.argv[2];
-// webpack-dev-server 默认监听端口
-let port = 8080;
-let portIndex = process.argv.indexOf('--port');
-if (portIndex !== -1) {
-  process.argv[portIndex + 1] && (port = process.argv[portIndex + 1]);
-}
 console.log(argv);
-console.log(`使用端口${port}...`);
 
 if (argv === '-v') {
 
 } else if (argv === '-dev') {
+  // webpack-dev-server 默认监听端口
+  let port = 8080;
+  let portIndex = process.argv.indexOf('--port');
+  if (portIndex !== -1) {
+    process.argv[portIndex + 1] && (port = process.argv[portIndex + 1]);
+  }
+  console.log(`使用端口${port}...`);
   dev.init(port);
 } else if (argv === '-build') {
-
+  build.init();
 } else if (argv === undefined) {
   console.log('缺少参数!')
 } else {
