@@ -61,6 +61,7 @@ module.exports = {
           loader: require.resolve('file-loader'),
           options: {
             name: 'img/[name].[ext]',
+            publicPath: './'
           }
         },
       },
