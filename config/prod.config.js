@@ -8,6 +8,8 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 // 当前运行目录
 const dir = process.cwd();
+let pathArr = dir.split(path.sep);
+let projectName = pathArr[pathArr.length - 1];
 
 const extractSass = new ExtractTextPlugin({
   filename: '[name].css',
@@ -61,7 +63,7 @@ module.exports = {
           loader: require.resolve('file-loader'),
           options: {
             name: 'img/[name].[ext]',
-            publicPath: './'
+            publicPath: `static/${projectName}/`,
           }
         },
       },
