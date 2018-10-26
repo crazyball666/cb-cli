@@ -41,9 +41,18 @@ module.exports = {
           options: {
             babelrc: false,
             presets: [require.resolve('babel-preset-react'), require.resolve('babel-preset-env'), require.resolve('babel-preset-stage-2')],
-            plugins: [[require.resolve('babel-plugin-transform-runtime'), {
-              "moduleName": path.resolve(__dirname, "../node_modules/babel-runtime")
-            }]],
+            plugins: [
+              [
+                require.resolve('babel-plugin-transform-runtime'),
+                {
+                  "moduleName": path.resolve(__dirname, "../node_modules/babel-runtime")
+                }
+              ],
+              [
+                require.resolve('babel-plugin-import'),
+                { "libraryName": "antd", "style": true }
+              ]
+            ],
           },
         },
       },
