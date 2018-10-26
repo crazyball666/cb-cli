@@ -50,7 +50,7 @@ module.exports = {
               ],
               [
                 require.resolve('babel-plugin-import'),
-                { "libraryName": "antd", "style": true }
+                { "libraryName": "antd" }
               ]
             ],
           },
