@@ -4,8 +4,8 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 // 加载自动化css独立加载插件
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 // 当前运行目录
 const dir = process.cwd();
 let pathArr = dir.split(path.sep);
@@ -24,7 +24,7 @@ module.exports = {
   },
   //设置打包出口
   output: {
-    path: path.resolve(dir, 'dist'), //打包文件放在这个目录下
+    path: path.resolve(dir, `../static/${projectName}`), //打包文件放在这个目录下
     filename: '[name].bundle.js', //打包文件名
     publicPath: '/',
   },
@@ -40,18 +40,19 @@ module.exports = {
           loader: require.resolve('babel-loader'),
           options: {
             babelrc: false,
-            presets: [require.resolve('babel-preset-react'), require.resolve('babel-preset-env'), require.resolve('babel-preset-stage-2')],
+            presets: [
+              require.resolve('babel-preset-react'),
+              require.resolve('babel-preset-env'),
+              require.resolve('babel-preset-stage-2'),
+            ],
             plugins: [
               [
                 require.resolve('babel-plugin-transform-runtime'),
                 {
-                  "moduleName": path.resolve(__dirname, "../node_modules/babel-runtime")
-                }
+                  moduleName: path.resolve(__dirname, '../node_modules/babel-runtime'),
+                },
               ],
-              [
-                require.resolve('babel-plugin-import'),
-                { "libraryName": "antd" }
-              ]
+              [require.resolve('babel-plugin-import'), { libraryName: 'antd' }],
             ],
           },
         },
@@ -60,10 +61,7 @@ module.exports = {
         test: /\.(scss|css)$/,
         use: extractSass.extract({
           fallback: require.resolve('style-loader'),
-          use: [
-            require.resolve('css-loader'),
-            require.resolve('sass-loader'),
-          ],
+          use: [require.resolve('css-loader'), require.resolve('sass-loader')],
         }),
       },
       {
@@ -72,8 +70,8 @@ module.exports = {
           loader: require.resolve('file-loader'),
           options: {
             name: 'img/[name].[ext]',
-            publicPath: `static/${projectName}/`,
-          }
+            publicPath: `//39.108.1.35:8080/${projectName}/`,
+          },
         },
       },
     ],
@@ -81,7 +79,7 @@ module.exports = {
   //插件相关配置
   plugins: [
     extractSass,
-    new CleanWebpackPlugin([path.resolve(dir, 'dist')]),
+    // new CleanWebpackPlugin([path.resolve(dir, 'dist')]),
   ],
   // 提取第三方库和公共模块
   optimization: {
@@ -92,9 +90,9 @@ module.exports = {
       new UglifyJsPlugin({
         cache: true,
         parallel: true,
-        sourceMap: false // set to true if you want JS source maps
+        sourceMap: false, // set to true if you want JS source maps
       }),
-      new OptimizeCSSAssetsPlugin({})
+      new OptimizeCSSAssetsPlugin({}),
     ],
     splitChunks: {
       cacheGroups: {
