@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 // 加载自动化css独立加载插件
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// html模版插件
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 // 当前运行目录
 const dir = process.cwd();
 
@@ -15,6 +17,7 @@ if (portIndex !== -1) {
 const extractSass = new ExtractTextPlugin({
 	filename: '[name].css',
 });
+
 
 //配置正式开始
 module.exports = {
@@ -79,6 +82,10 @@ module.exports = {
 						publicPath: `//localhost:${port}/`,
 					}
 				},
+			},
+			{
+				test: /\.ejs$/,
+				loader: require.resolve('ejs-loader'),
 			},
 		],
 	},
