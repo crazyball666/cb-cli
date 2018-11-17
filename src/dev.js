@@ -15,23 +15,16 @@ module.exports = {
       'webpack-dev-server/bin/webpack-dev-server.js'
     );
     let webpackConfigPath = path.resolve(__dirname, '../config/dev.config.js');
+    // js,css模版路径
+    let targetPath = path.resolve(buildConfig.outputTplPath);
 
-    // process.on('SIGINT', function () {
-    //   console.log('Exit now!');
-    //   process.exit();
-    // });
-
-    process.on('SIGTERM', function () {
-      // 恢复模版
-      fs.writeFile('1.txt', '123', function (err) {
-        if (err) console.log(err)
-        if (!err) console.log('成功')
-      })
+    process.on('SIGINT', function () {
       process.exit();
     });
 
-    // js,css模版路径
-    let targetPath = path.resolve(buildConfig.outputTplPath);
+    process.on('SIGTERM', function () {
+      process.exit();
+    });
 
     console.log('正在生成模版文件...');
     console.log(`文件地址为${targetPath}`);
@@ -47,6 +40,11 @@ module.exports = {
     console.log('模版文件已生成，等待webpck打包...');
 
     shelljs.exec(`node ${webpackDevServerPath} --progress --port ${port} --config ${webpackConfigPath}`);
+
+    console.log('正在恢复模版文件');
+    fs.copyFileSync(path.resolve(__dirname, '../default_tpl/_style.ejs'), path.resolve(targetPath, './_style.ejs'));
+    fs.copyFileSync(path.resolve(__dirname, '../default_tpl/_script.ejs'), path.resolve(targetPath, './_script.ejs'));
+    console.log('恢复模版文件成功！');
 
   },
 };
