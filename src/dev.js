@@ -8,13 +8,21 @@ const configPath = path.resolve(process.cwd(), './build.config.js');
 const buildConfig = require(`${configPath}`);
 
 module.exports = {
-  init: async (port) => {
+  init: async (port, mode) => {
     let webpackDevServerPath = path.resolve(
       __dirname,
       '../node_modules/',
       'webpack-dev-server/bin/webpack-dev-server.js'
     );
-    let webpackConfigPath = path.resolve(__dirname, '../config/dev.config.js');
+    let webpackConfigPath;
+    if (mode == 'vue') {
+      webpackConfigPath = path.resolve(__dirname, '../config/dev.config.vue.js');
+    } else if (mode == 'react') {
+      webpackConfigPath = path.resolve(__dirname, '../config/dev.config.js');
+    } else {
+      throw new Error('缺少打包模版');
+      process.exit();
+    }
     // js,css模版路径
     let targetPath = path.resolve(buildConfig.outputTplPath);
 

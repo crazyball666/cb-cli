@@ -4,6 +4,14 @@ const build = require('../src/build');
 const argv = process.argv[2];
 console.log(argv);
 
+let mode;
+process.argv.forEach(item => {
+  if (item == 'vue') mode = 'vue';
+  if (item == 'react') mode = 'react';
+});
+
+console.log(argv, mode);
+
 if (argv === '-v') {
 
 } else if (argv === '-dev') {
@@ -14,7 +22,7 @@ if (argv === '-v') {
     process.argv[portIndex + 1] && (port = process.argv[portIndex + 1]);
   }
   console.log(`使用端口${port}...`);
-  dev.init(port);
+  dev.init(port, mode);
 } else if (argv === '-build') {
   build.init();
 } else if (argv === undefined) {
