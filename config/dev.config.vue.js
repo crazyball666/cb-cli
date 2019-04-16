@@ -1,5 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
+
+/**
+ * Vue-loader在15.*之后的版本都是 vue-loader的使用都是需要伴生 VueLoaderPlugin的
+ * see https://blog.csdn.net/cominglately/article/details/80555210
+ */
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
 // 加载自动化css独立加载插件
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 // html模版插件
@@ -118,11 +125,17 @@ module.exports = {
 			},
 		],
 	},
+	resolve: {
+		alias: {
+			vue: 'vue/dist/vue.js',
+		}
+	},
 	//插件相关配置
 	plugins: [
 		extractSass,
 		new webpack.NamedModulesPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
+		new VueLoaderPlugin(),
 	],
 	// 提取第三方库和公共模块
 	optimization: {

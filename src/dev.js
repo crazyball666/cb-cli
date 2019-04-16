@@ -47,12 +47,13 @@ module.exports = {
 
     console.log('模版文件已生成，等待webpck打包...');
 
-    shelljs.exec(`node ${webpackDevServerPath} --progress --port ${port} --config ${webpackConfigPath}`);
+    let childProcess = shelljs.exec(`node ${webpackDevServerPath} --progress --port ${port} --config ${webpackConfigPath}`);
 
     console.log('正在恢复模版文件');
     fs.copyFileSync(path.resolve(__dirname, '../default_tpl/_style.ejs'), path.resolve(targetPath, './_style.ejs'));
     fs.copyFileSync(path.resolve(__dirname, '../default_tpl/_script.ejs'), path.resolve(targetPath, './_script.ejs'));
     console.log('恢复模版文件成功！');
+
 
   },
 };
