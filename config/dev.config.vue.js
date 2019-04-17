@@ -57,20 +57,6 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.js$/,
-				exclude: /(node_modules|bower_components)/,
-				use: {
-					loader: require.resolve('babel-loader'),
-					options: {
-						babelrc: false,
-						presets: [require.resolve('babel-preset-env'), require.resolve('babel-preset-stage-2')],
-						plugins: [[require.resolve('babel-plugin-transform-runtime'), {
-							"moduleName": path.resolve(__dirname, "../node_modules/babel-runtime")
-						}]],
-					},
-				},
-			},
-			{
 				test: /\.vue$/,
 				use: [
 					{
@@ -98,6 +84,20 @@ module.exports = {
 						},
 					},
 				],
+			},
+			{
+				test: /\.js$/,
+				exclude: /(node_modules|bower_components)/,
+				use: {
+					loader: require.resolve('babel-loader'),
+					options: {
+						babelrc: false,
+						presets: [require.resolve('babel-preset-env'), require.resolve('babel-preset-stage-2')],
+						plugins: [[require.resolve('babel-plugin-transform-runtime'), {
+							"moduleName": path.resolve(__dirname, "../node_modules/babel-runtime")
+						}]],
+					},
+				},
 			},
 			{
 				test: /\.(scss|css)$/,

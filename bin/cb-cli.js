@@ -24,7 +24,7 @@ if (argv === '-v') {
   console.log(`使用端口${port}...`);
   dev.init(port, mode);
 } else if (argv === '-build') {
-  build.init();
+  build.init(mode);
 } else if (argv === undefined) {
   console.log('缺少参数!')
 } else {
