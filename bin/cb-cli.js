@@ -1,32 +1,68 @@
 #!/usr/bin/env node
-const dev = require('../src/dev');
-const build = require('../src/build');
+const webpack = require("webpack");
+const path = require("path");
+const logger = require("../logger");
+const fs = require("fs");
 const argv = process.argv[2];
-console.log(argv);
 
-let mode;
-process.argv.forEach(item => {
-  if (item == 'vue') mode = 'vue';
-  if (item == 'react') mode = 'react';
-});
+const Koa = require('koa')
+const static = require('koa-static');
+const app = new Koa()
+let isRunning = false;
 
-console.log(argv, mode);
-
+// 当前运行目录
+const dir = process.cwd();
+let customConfig = {}
+try{
+  customConfig = JSON.parse(fs.readFileSync(path.resolve(dir,"./build.config.json")))
+}catch(err){
+  customConfig = {}
+}
+let prodConfig = require('../config/prod.config')
+let devConfig = require('../config/dev.config')
+let config;
 if (argv === '-v') {
-
+  console.log("cb-cli base on webpack 4")
 } else if (argv === '-dev') {
-  // webpack-dev-server 默认监听端口
-  let port = 8080;
-  let portIndex = process.argv.indexOf('--port');
-  if (portIndex !== -1) {
-    process.argv[portIndex + 1] && (port = process.argv[portIndex + 1]);
-  }
-  console.log(`使用端口${port}...`);
-  dev.init(port, mode);
+  config = devConfig;
+  config.entry = customConfig.entry ? customConfig.entry : config.entry;
 } else if (argv === '-build') {
-  build.init(mode);
-} else if (argv === undefined) {
-  console.log('缺少参数!')
+  config = prodConfig;
+  config.entry = customConfig.entry ? customConfig.entry : config.entry;
 } else {
-  console.log('参数不存在!');
+  console.log("unkonw argument")
+  return;
+}
+
+
+const compiler = webpack(config);
+if(argv === '-dev'){
+  compiler.watch({
+    aggregateTimeout: 500,
+    poll: undefined
+  },(err, stats) => {
+    if(err || stats.hasErrors()){
+        console.log(err || stats.toJson().errors)
+        return
+    }
+    let statsJson = stats.toJson()
+    console.log(`[build] : ${JSON.stringify(statsJson.assetsByChunkName)}`);
+    if(!isRunning){
+      app.use(static(path.join(devConfig.output.path)))
+      app.use( async ( ctx ) => {ctx.body = '404 not found'})
+      app.listen(8080, () => {
+        console.log('[dev] starting at port 8080')
+        isRunning = true
+      })
+    }
+  });
+}else if(argv === '-build'){
+  compiler.run((err, stats) => {
+    if(err || stats.hasErrors()){
+        logger.ciLoger.error(err || stats.toJson().errors)
+        return
+    }
+    let statsJson = stats.toJson()
+    logger.ciLoger.info(statsJson)
+  });
 }

@@ -11,9 +11,6 @@ const dir = process.cwd();
 let pathArr = dir.split(path.sep);
 let projectName = pathArr[pathArr.length - 1];
 
-const extractSass = new ExtractTextPlugin({
-  filename: '[name].css',
-});
 
 //配置正式开始
 module.exports = {
@@ -24,8 +21,8 @@ module.exports = {
   },
   //设置打包出口
   output: {
-    path: path.resolve(dir, `../static/${projectName}`), //打包文件放在这个目录下
-    filename: '[name].bundle.js', //打包文件名
+    path: path.resolve(dir, `./dist/${projectName}`), //打包文件放在这个目录下
+    filename: '[name].bundle.[hash].js', //打包文件名
     publicPath: '/',
   },
   // source-map
@@ -33,6 +30,35 @@ module.exports = {
   //loader 相关配置
   module: {
     rules: [
+      {
+        test: /\.vue$/,
+        use: [
+          {
+            loader: require.resolve('vue-loader'),
+            options: {
+              loaders: {
+                scss: ExtractTextPlugin.extract({
+                  fallback: require.resolve('style-loader'),
+                  use: [
+                    require.resolve('css-loader'),
+                    require.resolve('sass-loader'),
+                  ],
+                }),
+                js: {
+                  loader: require.resolve('babel-loader'),
+                  options: {
+                    babelrc: false,
+                    presets: [require.resolve('babel-preset-env'), require.resolve('babel-preset-stage-2')],
+                    plugins: [[require.resolve('babel-plugin-transform-runtime'), {
+                      "moduleName": path.resolve(__dirname, "../node_modules/babel-runtime")
+                    }]],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
@@ -52,14 +78,13 @@ module.exports = {
                   moduleName: path.resolve(__dirname, '../node_modules/babel-runtime'),
                 },
               ],
-              [require.resolve('babel-plugin-import'), { libraryName: 'antd' }],
             ],
           },
         },
       },
       {
         test: /\.(scss|css)$/,
-        use: extractSass.extract({
+        use: ExtractTextPlugin.extract({
           fallback: require.resolve('style-loader'),
           use: [require.resolve('css-loader'), require.resolve('sass-loader')],
         }),
@@ -70,7 +95,7 @@ module.exports = {
           loader: require.resolve('file-loader'),
           options: {
             name: 'img/[name].[ext]',
-            publicPath: `//39.108.1.35:8080/${projectName}/`,
+            publicPath: `/${projectName}/`,
           },
         },
       },
@@ -78,14 +103,11 @@ module.exports = {
   },
   //插件相关配置
   plugins: [
-    extractSass,
-    // new CleanWebpackPlugin([path.resolve(dir, 'dist')]),
+    new ExtractTextPlugin({filename: '[name].bundle.[hash].css',}),
+    new CleanWebpackPlugin([path.resolve(dir, './dist')]),
   ],
   // 提取第三方库和公共模块
   optimization: {
-    // runtimeChunk: {
-    //   name: 'manifest'
-    // },
     minimizer: [
       new UglifyJsPlugin({
         cache: true,
@@ -105,7 +127,6 @@ module.exports = {
           maxInitialRequests: 5,
           minSize: 0,
           priority: 100,
-          // enforce: true?
         },
       },
     },
