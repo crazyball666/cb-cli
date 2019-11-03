@@ -1,5 +1,5 @@
 {
-  "name": "new-cli",
+  "name": "cb-cli",
   "version": "1.0.0",
   "description": "ci tool",
   "main": "main.js",

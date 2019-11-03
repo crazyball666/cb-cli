@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 // 清除dist插件
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const cleanDist = require('../plugins/cleanDist')
 // 加载自动化css独立加载插件
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -16,8 +16,7 @@ let projectName = pathArr[pathArr.length - 1];
 module.exports = {
   //设置入口
   entry: {
-    app: path.resolve(dir, './src/js/app.js'),
-    vendor: path.resolve(dir, './src/js/vendor.js'),
+    app: path.resolve(dir, './app.js'),
   },
   //设置打包出口
   output: {
@@ -94,8 +93,8 @@ module.exports = {
         use: {
           loader: require.resolve('file-loader'),
           options: {
-            name: 'img/[name].[ext]',
-            publicPath: `/${projectName}/`,
+            name: 'assest/[name].[ext]',
+            publicPath: `static/${projectName}/`,
           },
         },
       },
@@ -103,8 +102,8 @@ module.exports = {
   },
   //插件相关配置
   plugins: [
-    new ExtractTextPlugin({filename: '[name].bundle.[hash].css',}),
-    new CleanWebpackPlugin([path.resolve(dir, './dist')]),
+    new ExtractTextPlugin({ filename: '[name].bundle.[hash].css', }),
+    new cleanDist(path.resolve(dir, './dist')),
   ],
   // 提取第三方库和公共模块
   optimization: {

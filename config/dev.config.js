@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 // 清除dist插件
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const cleanDist = require('../plugins/cleanDist')
 // 加载自动化css独立加载插件
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 // html模版插件
@@ -21,8 +21,7 @@ if (portIndex !== -1) {
 module.exports = {
 	//设置入口
 	entry: {
-		app: path.resolve(dir, './src/js/app.js'),
-		vendor: path.resolve(dir, './src/js/vendor.js'),
+		app: path.resolve(dir, './app.js'),
 	},
 	//设置打包出口
 	output: {
@@ -38,30 +37,30 @@ module.exports = {
 			{
 				test: /\.vue$/,
 				use: [
-				  {
-					loader: require.resolve('vue-loader'),
-					options: {
-					  loaders: {
-						scss: ExtractTextPlugin.extract({
-						  fallback: require.resolve('style-loader'),
-						  use: [
-							require.resolve('css-loader'),
-							require.resolve('sass-loader'),
-						  ],
-						}),
-						js: {
-						  loader: require.resolve('babel-loader'),
-						  options: {
-							babelrc: false,
-							presets: [require.resolve('babel-preset-env'), require.resolve('babel-preset-stage-2')],
-							plugins: [[require.resolve('babel-plugin-transform-runtime'), {
-							  "moduleName": path.resolve(__dirname, "../node_modules/babel-runtime")
-							}]],
-						  },
+					{
+						loader: require.resolve('vue-loader'),
+						options: {
+							loaders: {
+								scss: ExtractTextPlugin.extract({
+									fallback: require.resolve('style-loader'),
+									use: [
+										require.resolve('css-loader'),
+										require.resolve('sass-loader'),
+									],
+								}),
+								js: {
+									loader: require.resolve('babel-loader'),
+									options: {
+										babelrc: false,
+										presets: [require.resolve('babel-preset-env'), require.resolve('babel-preset-stage-2')],
+										plugins: [[require.resolve('babel-plugin-transform-runtime'), {
+											"moduleName": path.resolve(__dirname, "../node_modules/babel-runtime")
+										}]],
+									},
+								},
+							},
 						},
-					  },
 					},
-				  },
 				],
 			},
 			{
@@ -106,8 +105,8 @@ module.exports = {
 	},
 	//插件相关配置
 	plugins: [
-		new ExtractTextPlugin({filename: '[name].bundle.[hash].css',}),
-		new CleanWebpackPlugin([path.resolve(dir, './dist')]),
+		new ExtractTextPlugin({ filename: '[name].bundle.[hash].css', }),
+		new cleanDist(path.resolve(dir, './dist')),
 		new webpack.NamedModulesPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 	],
