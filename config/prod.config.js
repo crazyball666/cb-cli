@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 // 清除dist插件
 const cleanDist = require('../plugins/cleanDist')
@@ -11,7 +12,15 @@ const dir = process.cwd();
 let pathArr = dir.split(path.sep);
 let projectName = pathArr[pathArr.length - 1];
 
-
+let customConfig = {}
+try {
+  customConfig = JSON.parse(fs.readFileSync(path.resolve(dir, "./build.config.json")))
+} catch (err) {
+  customConfig = {}
+}
+let outputPath = customConfig["OUTPUT_PATH"] ?
+  path.resolve(customConfig["OUTPUT_PATH"], `./${projectName}`) :
+  path.resolve(dir, `./dist`);
 //配置正式开始
 module.exports = {
   //设置入口
@@ -20,7 +29,7 @@ module.exports = {
   },
   //设置打包出口
   output: {
-    path: path.resolve(dir, `./dist/${projectName}`), //打包文件放在这个目录下
+    path: outputPath,
     filename: '[name].bundle.[hash].js', //打包文件名
     publicPath: '/',
   },
@@ -103,7 +112,7 @@ module.exports = {
   //插件相关配置
   plugins: [
     new ExtractTextPlugin({ filename: '[name].bundle.[hash].css', }),
-    new cleanDist(path.resolve(dir, './dist')),
+    new cleanDist(outputPath),
   ],
   // 提取第三方库和公共模块
   optimization: {
