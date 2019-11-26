@@ -25,7 +25,7 @@ module.exports = {
 	},
 	//设置打包出口
 	output: {
-		path: path.resolve(dir, './dist'), //打包文件放在这个目录下
+		path: "/", //打包文件放在这个目录下
 		filename: '[name].bundle.[hash].js', //打包文件名
 		publicPath: '/',
 	},

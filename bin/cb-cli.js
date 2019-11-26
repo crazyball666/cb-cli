@@ -3,12 +3,13 @@ const webpack = require("webpack");
 const path = require("path");
 const logger = require("../logger");
 const fs = require("fs");
+const MemoryFileSystem = require("memory-fs");
+const memoryFs = new MemoryFileSystem();
 const argv = process.argv[2];
 
 const Koa = require('koa')
-const static = require('koa-static');
 const app = new Koa()
-let isRunning = false;
+
 
 // 当前运行目录
 const dir = process.cwd();
@@ -42,9 +43,12 @@ if (argv === '-v') {
 const compiler = webpack(config);
 let watch;
 if (argv === '-dev') {
+  stratServer(app);
+  compiler.outputFileSystem = memoryFs; // 输出内存
   watch = compiler.watch({
+    ignored: `/node_modules/`,
     aggregateTimeout: 500,
-    poll: undefined
+    poll: 1000
   }, (err, stats) => {
     if (err || stats.hasErrors()) {
       console.log(err || stats.toJson().errors)
@@ -53,16 +57,10 @@ if (argv === '-dev') {
     let statsJson = stats.toJson()
     console.log(`【build】\n${JSON.stringify(statsJson.assetsByChunkName)}`);
     if (customConfig["HTML_PATH"]) {
-      console.log(`handle html... path:${customConfig["HTML_PATH"]}`);
-      handleHTML(customConfig["HTML_PATH"], statsJson.assetsByChunkName);
-    }
-    if (!isRunning) {
-      app.use(static(path.join(devConfig.output.path)))
-      app.use(async (ctx) => { ctx.body = '404 not found' })
-      app.listen(port, () => {
-        console.log('【dev】 starting at port 8080')
-        isRunning = true
-      })
+      try {
+        console.log(`handle html... path:${customConfig["HTML_PATH"]}`);
+        handleHTML(customConfig["HTML_PATH"], statsJson.assetsByChunkName); 
+      } catch (err) {}
     }
   });
 } else if (argv === '-build') {
@@ -105,7 +103,6 @@ function handleHTML(path, data) {
   fs.writeFileSync(path, newFileData);
 }
 
-
 function handleHTMLBuild(path, data) {
   let output = [];
   Object.keys(data).forEach(key => {
@@ -132,9 +129,24 @@ function handleHTMLBuild(path, data) {
 }
 
 process.on('SIGINT', function () {
-  console.log('Got SIGINT');
   watch.close(() => {
     console.log("Webpack Watching Ended.");
     process.exit()
   });
 });
+
+function stratServer(app){
+  app.use(async (ctx)=>{
+    try {
+      content = memoryFs.readFileSync(path.resolve(devConfig.output.path,ctx.path))
+      ctx.type = path.extname(ctx.path)
+      ctx.body = content; 
+    } catch (err) {
+      ctx.stats = 404;
+      ctx.body = "404 not found";
+    }
+  })
+  app.listen(port, () => {
+    console.log('【dev】 starting at port 8080')
+  })
+}
