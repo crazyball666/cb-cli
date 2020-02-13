@@ -77,8 +77,7 @@ module.exports = {
         use: {
           loader: require.resolve('file-loader'),
           options: {
-            name: 'img/[name].[ext]',
-            publicPath: `//localhost:${port}/`,
+            name: 'assets/[name].[ext]',
           },
         },
       },
