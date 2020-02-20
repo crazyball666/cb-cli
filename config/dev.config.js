@@ -73,7 +73,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|svg|jpg|gif|ttf|woff)$/,
+        test: /\.(png|svg|jpg|gif|ttf|woff|woff2|eot)$/,
         use: {
           loader: require.resolve('file-loader'),
           options: {
