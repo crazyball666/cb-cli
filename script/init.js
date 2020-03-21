@@ -1,7 +1,7 @@
 const readlineSync = require('readline-sync');
 const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk')
+const chalk = require('chalk');
 
 module.exports = function () {
   let config = {};
