@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 let baseConfig = require("./base.config");
-const path = require('path')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
 baseConfig.output = {

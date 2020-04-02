@@ -5,7 +5,7 @@ const Koa = require('koa');
 const webpack = require('webpack');
 const chalk = require('chalk');
 const cheerio = require('cheerio');
-const util = require('../util/util')
+const util = require('../util/util');
 
 function buildDev(port, config) {
   const compiler = webpack(config);
@@ -85,7 +85,11 @@ function stratServer(app, port, memoryFs, basePath) {
 
 // 处理html模版
 function handleHTML(htmlPath, data, port) {
-  let $ = cheerio.load(fs.readFileSync(htmlPath));
+  let $ = cheerio.load(fs.readFileSync(htmlPath), {
+    decodeEntities: false,
+    normalizeWhitespace: false,
+    ignoreWhitespace: false,
+  });
   $('link[attr-cli]').remove();
   $('script[attr-cli]').remove();
   data.forEach(item => {
@@ -95,7 +99,11 @@ function handleHTML(htmlPath, data, port) {
       $('html').append(`<script attr-cli src="//localhost:${port}/${item}"></script>`)
     }
   });
-  fs.writeFileSync(htmlPath, $.html());
+  fs.writeFileSync(htmlPath, $.html({
+    decodeEntities: false,
+    normalizeWhitespace: false,
+    ignoreWhitespace: false,
+  }));
   console.log(chalk.green(`✅ | Write Html Success! Path: ${chalk.blue(path.resolve(global.projectConfig['HTML_PATH']))}`));
 }
 

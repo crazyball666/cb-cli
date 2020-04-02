@@ -43,7 +43,11 @@ function buildPro(config) {
 }
 
 function handleHTMLBuild(htmlPath, data) {
-  let $ = cheerio.load(fs.readFileSync(htmlPath));
+  let $ = cheerio.load(fs.readFileSync(htmlPath), {
+    decodeEntities: false,
+    normalizeWhitespace: false,
+    ignoreWhitespace: false,
+  });
   $('link[attr-cli]').remove();
   $('script[attr-cli]').remove();
   data.forEach(item => {
@@ -53,7 +57,11 @@ function handleHTMLBuild(htmlPath, data) {
       $('html').append(`<script attr-cli src="//static.crazyball.xyz/${global.projectConfig["PROJECT_NAME"]}/${item}"></script>`)
     }
   });
-  fs.writeFileSync(htmlPath, $.html());
+  fs.writeFileSync(htmlPath, $.html({
+    decodeEntities: false,
+    normalizeWhitespace: false,
+    ignoreWhitespace: false,
+  }));
   console.log(chalk.green(`✅ | Write Html Success! Path: ${chalk.blue(path.resolve(global.projectConfig['HTML_PATH']))}`));
 }
 
