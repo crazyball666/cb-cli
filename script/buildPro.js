@@ -43,25 +43,47 @@ function buildPro(config) {
 }
 
 function handleHTMLBuild(htmlPath, data) {
-  let $ = cheerio.load(fs.readFileSync(htmlPath), {
-    decodeEntities: false,
-    normalizeWhitespace: false,
-    ignoreWhitespace: false,
-  });
-  $('link[attr-cli]').remove();
-  $('script[attr-cli]').remove();
+  let styleArr = [];
+  let scriptArr = [];
   data.forEach(item => {
     if (/\.css$/.test(item)) {
-      $('head').append(`<link attr-cli rel="stylesheet" href="//static.crazyball.xyz/${global.projectConfig["PROJECT_NAME"]}/${item}">`)
+      styleArr.push(`<link rel="stylesheet" href="//static.crazyball.xyz/${global.projectConfig["PROJECT_NAME"]}/${item}">`)
     } else {
-      $('html').append(`<script attr-cli src="//static.crazyball.xyz/${global.projectConfig["PROJECT_NAME"]}/${item}"></script>`)
+      scriptArr.push(`<script src="//static.crazyball.xyz/${global.projectConfig["PROJECT_NAME"]}/${item}"></script>`)
     }
   });
-  fs.writeFileSync(htmlPath, $.html({
-    decodeEntities: false,
-    normalizeWhitespace: false,
-    ignoreWhitespace: false,
-  }));
+  let styleRes = styleArr.join("\n");
+  let scriptRes = scriptArr.join("\n");
+
+  let styleTplReg = new RegExp("<style-tpl>(.|\n)*<\/style-tpl>", "ig");
+  let scriptTplReg = new RegExp("<script-tpl>(.|\n)*<\/script-tpl>", "ig");
+
+  let htmlContent = fs.readFileSync(htmlPath).toString();
+
+  htmlContent = htmlContent.replace(styleTplReg, `<style-tpl>\n${styleRes}\n<\/style-tpl>`);
+  htmlContent = htmlContent.replace(scriptTplReg, `<script-tpl>\n${scriptRes}\n<\/script-tpl>`);
+
+  fs.writeFileSync(htmlPath, htmlContent);
+
+  // let $ = cheerio.load(fs.readFileSync(htmlPath), {
+  //   decodeEntities: false,
+  //   normalizeWhitespace: false,
+  //   ignoreWhitespace: false,
+  // });
+  // $('link[attr-cli]').remove();
+  // $('script[attr-cli]').remove();
+  // data.forEach(item => {
+  //   if (/\.css$/.test(item)) {
+  //     $('head').append(`<link attr-cli rel="stylesheet" href="//static.crazyball.xyz/${global.projectConfig["PROJECT_NAME"]}/${item}">`)
+  //   } else {
+  //     $('html').append(`<script attr-cli src="//static.crazyball.xyz/${global.projectConfig["PROJECT_NAME"]}/${item}"></script>`)
+  //   }
+  // });
+  // fs.writeFileSync(htmlPath, $.html({
+  //   decodeEntities: false,
+  //   normalizeWhitespace: false,
+  //   ignoreWhitespace: false,
+  // }));
   console.log(chalk.green(`✅ | Write Html Success! Path: ${chalk.blue(path.resolve(global.projectConfig['HTML_PATH']))}`));
 }
 
