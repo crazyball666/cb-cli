@@ -7,6 +7,8 @@ let baseConfig = require("./base.config");
 baseConfig.output = {
   path: path.resolve(global.projectConfig.OUTPUT_PATH),
   filename: '[name].bundle.[hash].js',
+  chunkFilename: '[name].bundle.js',
+  publicPath: `${global.projectConfig["PUBLIC_PATH"] ? global.projectConfig["PUBLIC_PATH"] : "/" }`
 };
 baseConfig.devtool = false;
 baseConfig.plugins = baseConfig.plugins.concat([

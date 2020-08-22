@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const chalk = require('chalk');
-const cheerio = require('cheerio');
-const util = require('../util/util')
+const util = require('../util/util');
+const urljoin = require('url-join');
 
 function buildPro(config) {
   const compiler = webpack(config);
@@ -19,11 +19,16 @@ function buildPro(config) {
     }
     console.log(chalk.yellow(`   - Webpack ${result.version}`));
     console.log(chalk.green('✅ | Build Success!'));
-    console.log(chalk.green(`✅ | Build At ${util.formatDate('YYYY-mm-dd HH:MM',new Date(result.builtAt))} ｜ Use ${chalk(result.time)} ms`));
+    console.log(chalk.green(`✅ | Build At ${chalk.blue(util.formatDate('YYYY-mm-dd HH:MM',new Date(result.builtAt)))} ｜ Use ${chalk.blue(result.time)} ms | Hash ${chalk.blue(result.hash)}`));
+    console.log(chalk.green(`✅ | Output Path: ${chalk.blue(result.outputPath)} ｜ Public Path: ${chalk.blue(result.publicPath)}`));
     result.assets.forEach(item => {
       console.log(`   - [${chalk.blue(util.formatSize(item.size))}] ${item.name}`);
     });
-    if (global.projectConfig['HTML_PATH']) {
+    console.log(chalk.green('【Build Bundle】'));
+    Object.keys(result.assetsByChunkName).forEach(key => {
+      console.log(chalk.yellow(`  ${key}: ${result.assetsByChunkName[key].toString()}`))
+    });
+    if (global.projectConfig['HTML_PATH'] && global.projectConfig["PUBLIC_PATH"]) {
       try {
         let outputArr = [];
         Object.keys(result.assetsByChunkName).forEach(key => {
@@ -46,10 +51,12 @@ function handleHTMLBuild(htmlPath, data) {
   let styleArr = [];
   let scriptArr = [];
   data.forEach(item => {
+    let publicPath = urljoin(global.projectConfig["PUBLIC_PATH"], `${item}`);
+    console.log(chalk.green(`   - Resource Public Path: ${chalk.blue(publicPath)}`));
     if (/\.css$/.test(item)) {
-      styleArr.push(`<link rel="stylesheet" href="//static.crazyball.xyz/${global.projectConfig["PROJECT_NAME"]}/${item}">`)
+      styleArr.push(`<link rel="stylesheet" href="${publicPath}">`)
     } else {
-      scriptArr.push(`<script src="//static.crazyball.xyz/${global.projectConfig["PROJECT_NAME"]}/${item}"></script>`)
+      scriptArr.push(`<script src="${publicPath}"></script>`)
     }
   });
   let styleRes = styleArr.join("\n");

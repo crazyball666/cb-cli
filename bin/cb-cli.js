@@ -12,7 +12,8 @@ const buildPro = require('../script/buildPro');
 //默认设置
 let defaultConfig = {
   ENTRY_PATH: './main.js',
-  OUTPUT_PATH: './dist'
+  OUTPUT_PATH: './dist',
+  PUBLIC_PATH: '/',
 };
 
 
@@ -60,6 +61,7 @@ function showHelp() {
   console.log('cb-cli base on webpack4');
 }
 
+/// 加载全局配置
 function loadProjectConfig() {
   let projectConfig = {};
   try {
@@ -68,8 +70,10 @@ function loadProjectConfig() {
     console.log('[Error] read project config error');
   }
   global.projectConfig = Object.assign(defaultConfig, projectConfig);
+  global.projectConfig.DEV_PORT = argvs.port;
 }
 
+/// 加载webpack配置
 function loadWepackConfig(mode) {
   let config = {};
   if (mode == 'dev') {
@@ -79,8 +83,3 @@ function loadWepackConfig(mode) {
   }
   return config;
 }
-
-//========================[build develope]=============================
-
-
-//========================[build production]===========================
